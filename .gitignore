@@ -1,0 +1,16 @@
+# Ignorar diretório node_modules gerado pelo npm
+node_modules/
+
+# Ignorar arquivos de log
+*.log
+
+# Ignorar arquivos de configuração específicos do ambiente local
+.env
+
+# Ignorar arquivos de build ou output de tarefas de compilação
+dist/
+build/
+
+# Ignorar arquivos de dependência específicos do editor (opcional)
+.vscode/
+.idea/
