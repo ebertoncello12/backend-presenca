@@ -12,7 +12,7 @@ const app = express()
 const PORT = 3000
 
 app.use('/api', route);
-app.use('/api', StudentRoute);
+app.use('/api/student', StudentRoute);
 app.use(cors())
 app.use(bodyParser.json());
 

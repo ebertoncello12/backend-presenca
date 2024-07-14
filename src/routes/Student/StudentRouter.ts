@@ -2,7 +2,7 @@ import { Router } from "express";
 
 const StudentRoute = Router();
 
-StudentRoute.get('/student/:id', (req, res) => {
+StudentRoute.get('/:id', (req, res) => {
     res.send('Teste da rota Student');
 });
 
