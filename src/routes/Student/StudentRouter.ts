@@ -1,10 +1,8 @@
 import { Router } from "express";
+import { getUserById } from "../../Controllers/StudentController";
 
 const StudentRoute = Router();
 
-StudentRoute.get('/:id', (req, res) => {
-    res.send('Teste da rota Student');
-});
-
+StudentRoute.get('/:id', getUserById)
 export default StudentRoute
 
