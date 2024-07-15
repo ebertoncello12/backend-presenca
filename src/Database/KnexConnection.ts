@@ -6,9 +6,8 @@ export const knexInstance = knex(knexFile);
 
 export const knexTestConnection = async() => {
 try {
-const teste = await knexInstance.raw('SELECT * FROM presenca.usuario');
-console.log(teste, 'deu certo')
+const testeConnnection = await knexInstance.raw('SELECT * FROM presenca.students');
 } catch(e) {
-    console.log(e, 'Error a o conectar no sql com knex');
+console.log(e, 'Error a o conectar no sql com knex');
 }
 }

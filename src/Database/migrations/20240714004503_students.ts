@@ -2,6 +2,15 @@ import type { Knex } from "knex";
 
 
 export async function up(knex: Knex): Promise<void> {
+
+    await knex.schema.createTable('courses', (table)=>{
+        
+        table.uuid('id').primary();
+        table.string('name').notNullable();
+        table.string('max_semester').notNullable(); // adicionando id como FK da tabela users
+    })
+    
+
     await knex.schema.createTable('users', (table)=>{
         
         table.uuid('id').primary();
@@ -19,16 +28,11 @@ export async function up(knex: Knex): Promise<void> {
         table.uuid('id').primary();
         table.string('name').notNullable();
         table.string('code').notNullable();
+        table.string('course_id').references('id').inTable('courses'); // matricula do aluno
+
     })
 
-    await knex.schema.createTable('courses', (table)=>{
-        
-        table.uuid('id').primary();
-        table.string('name').notNullable();
-        table.string('subject_id').references('id').inTable('subjects'); // matricula do aluno
-        table.string('max_semester').notNullable(); // adicionando id como FK da tabela users
-    })
-    
+  
     await knex.schema.createTable('students', (table)=>{
         
         table.uuid('id').primary();
