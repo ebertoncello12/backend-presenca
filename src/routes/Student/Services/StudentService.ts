@@ -1,11 +1,11 @@
-import { ResourceNotFoundExeception } from "../Exception/ResourceNotFoundExeception";
+import { ResourceNotFoundExeception } from "../../../Exception/ResourceNotFoundExeception";
 import { StudentStorage } from "../Storage/StudentStorage";
-import { generateRandomQRCode } from "../Helper/GenerateQrCodeHelper";
+import { generateRandomQRCode } from "../../../Helper/GenerateQrCodeHelper";
 import { randomUUID } from "crypto";
 import { v4 as uuidv4 } from 'uuid';
-import { BadRequestExeception } from "../Exception/BadRequestExeception";
-import { CODE_ERROR_QRCODE_IS_ALEARDY_GENERATED, CODE_ERROR_QRCODE_NOT_FOUND, CODE_ERROR_QRCODE_DIFERRENT_CODE, CODE_ERROR_QRCODE_ID_DIFERRENT, CODE_ERROR_ATTENDANCE_IS_ALEARDLY_MARKED, CODE_ERROR_QRCODE_EXPIRED } from "../Exception/CodeErrors/CodeErrors";
-import { CODE_ERROR_QRCODE_IS_USED } from "../Exception/CodeErrors/CodeErrors";
+import { BadRequestExeception } from "../../../Exception/BadRequestExeception";
+import { CODE_ERROR_QRCODE_IS_ALEARDY_GENERATED, CODE_ERROR_QRCODE_NOT_FOUND, CODE_ERROR_QRCODE_DIFERRENT_CODE, CODE_ERROR_QRCODE_ID_DIFERRENT, CODE_ERROR_ATTENDANCE_IS_ALEARDLY_MARKED, CODE_ERROR_QRCODE_EXPIRED } from "../../../Exception/CodeErrors/CodeErrors";
+import { CODE_ERROR_QRCODE_IS_USED } from "../../../Exception/CodeErrors/CodeErrors";
 import qr from 'qr-image'
 
 export class StudentService {
@@ -115,7 +115,7 @@ export class StudentService {
         }
     }
 // aqui vai ser aonde o usuario vai marcar presença e por isso precisamos de algumas validaçoes     
-public static async patchAttendanceQrCodeService(attendanceObj: any, studentId: string): Promise<string> {
+public static async patchAttendanceQrCodeService(attendanceObj: any, studentId: string): Promise<string> {//lendo qrcode
     try {
         // Transforma o array em objeto acessando o primeiro elemento
         const qrCodeData = attendanceObj[0];
@@ -129,10 +129,7 @@ public static async patchAttendanceQrCodeService(attendanceObj: any, studentId: 
         if (!foundQrCodeObj) {
             throw new BadRequestExeception(CODE_ERROR_QRCODE_NOT_FOUND);
         }
-
-        if (foundQrCodeData.used === true) {
-            throw new BadRequestExeception(CODE_ERROR_QRCODE_IS_USED);
-        }
+        //precisamos remover da tabela qrcode a coluna usado, 1 qrcode pra n alunos
         if (foundQrCodeObj.id !== qrCodeData.id) {
             throw new BadRequestExeception(CODE_ERROR_QRCODE_ID_DIFERRENT);
         }

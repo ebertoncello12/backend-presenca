@@ -10,10 +10,10 @@ export async function up(knex: Knex): Promise<void> {
   ]);
   // Inserir materias
   await knex('subjects').insert([
-    { id: '0fae54ef-b2da-4b15-a84d-168b0d2e06fd', name: 'Cálculo 1', code: 'CAL101', course_id: '4546fb88-e05b-40c0-bb77-4da9e9301549' }, // Engenharia Mecânica
-    { id: 'b2e2e2ef-9b4f-4e10-8fcf-4207c7d57a3f', name: 'Cálculo 2', code: 'CAL102', course_id: '4546fb88-e05b-40c0-bb77-4da9e9301549' }, // Engenharia Mecânica
-    { id: '4b9b620c-dff5-4e69-b8c4-5b58c89d240e', name: 'Cálculo 3', code: 'CAL103', course_id: '4546fb88-e05b-40c0-bb77-4da9e9301549' }, // Engenharia Mecânica
-    { id: '4c9b621c-dff6-4e70-b8c5-5b59c90d242e', name: 'Cálculo 4', code: 'CAL104', course_id: '4546fb88-e05b-40c0-bb77-4da9e9301549' }, // Engenharia Mecânica
+    { id: '0fae54ef-b2da-4b15-a84d-168b0d2e06fd', name: 'Cálculo 1', code: 'CAL101', course_id: '4546fb88-e05b-40c0-bb77-4da9e9301549' }, // Engenharias
+    { id: 'b2e2e2ef-9b4f-4e10-8fcf-4207c7d57a3f', name: 'Cálculo 2', code: 'CAL102', course_id: '4546fb88-e05b-40c0-bb77-4da9e9301549' }, // Engenharias 
+    { id: '4b9b620c-dff5-4e69-b8c4-5b58c89d240e', name: 'Cálculo 3', code: 'CAL103', course_id: '4546fb88-e05b-40c0-bb77-4da9e9301549' }, // Engenharias 
+    { id: '4c9b621c-dff6-4e70-b8c5-5b59c90d242e', name: 'Cálculo 4', code: 'CAL104', course_id: '4546fb88-e05b-40c0-bb77-4da9e9301549' }, // Engenharias 
     { id: 'c6f40d7a-825d-4c5e-b9b0-94299d3f1a01', name: 'Algoritmos e Estruturas de Dados', code: 'ECOMP201', course_id: 'b2ff80f2-9edf-494e-97d9-72234375206b' }, // Ciências da Computação
     { id: '7b5a14e2-5a5b-475c-b438-272f7462a2b7', name: 'Arquitetura de Computadores', code: 'ECOMP202', course_id: 'b2ff80f2-9edf-494e-97d9-72234375206b' }, // Ciências da Computação
     { id: '1f09fa4b-90ec-4ba7-aa7b-4b89a2a6f71c', name: 'Redes de Computadores', code: 'ECOMP203', course_id: 'b2ff80f2-9edf-494e-97d9-72234375206b' }, // Ciências da Computação

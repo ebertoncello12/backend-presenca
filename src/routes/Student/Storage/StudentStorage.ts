@@ -1,5 +1,5 @@
-import { knexInstance } from "../Database/KnexConnection";
-import { generateRandomQRCode } from "../Helper/GenerateQrCodeHelper";
+import { knexInstance } from "../../../Database/KnexConnection";
+import { generateRandomQRCode } from "../../../Helper/GenerateQrCodeHelper";
 export class StudentStorage {
     public async findById(id: string): Promise<any> {
         try {

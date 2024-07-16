@@ -16,6 +16,7 @@
     "@types/express": "^4.17.21",
     "@types/knex": "^0.16.1",
     "@types/node": "^20.14.10",
+    "bcrypt": "^5.1.1",
     "chalk": "^5.3.0",
     "colors": "^1.4.0",
     "cors": "^2.8.5",
@@ -33,6 +34,7 @@
   },
   "description": "",
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
     "@types/mssql": "^9.1.5",
     "@types/qr-image": "^3.2.9",

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { StudentService } from '../services/StudentService';
-import { StudentTransformer } from '../transformers/StudentTranformer';
+import { StudentService } from '../Services/StudentService';
+import { StudentTransformer } from '../../../transformers/StudentTranformer';
 
 export const getUserByIdController = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
