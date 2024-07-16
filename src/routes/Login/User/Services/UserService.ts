@@ -1,4 +1,4 @@
-import { UserStorage } from "../../Storage/UserStorage";
+import { UserStorage } from "../Storage/UserStorage";
 import { ResourceNotFoundExeception } from "../../../../Exception/ResourceNotFoundExeception";
 
 

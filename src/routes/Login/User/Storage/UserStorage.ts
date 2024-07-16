@@ -1,7 +1,7 @@
-import { knexInstance } from "../../../Database/KnexConnection";
-import { generateRandomQRCode } from "../../../Helper/GenerateQrCodeHelper";
+import { knexInstance } from "../../../../Database/KnexConnection";
+import { generateRandomQRCode } from "../../../../Helper/GenerateQrCodeHelper";
 import bcrypt from 'bcrypt'
-import { ResourceNotFoundExeception } from "../../../Exception/ResourceNotFoundExeception";
+import { ResourceNotFoundExeception } from "../../../../Exception/ResourceNotFoundExeception";
 
 export class UserStorage {
 

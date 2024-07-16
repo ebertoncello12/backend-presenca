@@ -7,7 +7,7 @@ import cors from 'cors'
 import StudentRoute from './routes/Student/Router/StudentRouter'
 import LoggerMiddleware from './Middleware/LoggerMiddeware'
 import { ResourceNotFoundExeception } from './Exception/ResourceNotFoundExeception'
-import UserRoute from './routes/Login/Router/UserRouter'
+import UserRoute from './routes/Login/User/Router/UserRouter'
 dotenv.config();
 // Chamar a conexao com o banco na aplicação do servidor
 const app = express()
