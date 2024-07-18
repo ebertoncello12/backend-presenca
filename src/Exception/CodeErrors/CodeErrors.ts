@@ -47,3 +47,8 @@ export const CODE_ERROR_QRCODE_EXPIRED = {
     message: 'QRCODE ja foi expirado , porfavor entrar em contato com o professor da aula'
 }
 
+export const CODE_ERROR_UNAUTHORIZED = {
+    code: 'CODE_ERROR_QRCODE_EXPIRED',
+    message: 'Sem autorização para isso'
+}
+

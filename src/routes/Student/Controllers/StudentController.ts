@@ -1,9 +1,14 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { StudentService } from '../Services/StudentService';
 import { StudentTransformer } from '../../../transformers/StudentTranformer';
+import jwt from 'jsonwebtoken'
+import { AuthHelper } from '../../Login/Helper/AuthHelper';
+import { verifyToken } from '../../../Middleware/AuthMiddleware';
 
 export const getUserByIdController = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
+   
+    
     try {
         const data = await StudentService.getStudentByIdService(id); // Chama o método de forma assíncrona usando await
         // const response = await StudentTransformer.transformStudent(data); // Chama o método de forma assíncrona usando await
@@ -14,7 +19,7 @@ export const getUserByIdController = async (req: Request, res: Response): Promis
     }
 };
 
-export const getStudentAttendanceController = async (req: Request, res: Response): Promise<void> => {
+export const getStudentAttendanceController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { id } = req.params;
     try {
         const data = await StudentService.getStudentAttendanceService(id); // Chama o método de forma assíncrona usando await
@@ -28,6 +33,8 @@ export const getStudentAttendanceController = async (req: Request, res: Response
 
 export const postStudentQrCodeController = async (req: Request, res: Response): Promise<void> => {
     const { classId } = req.params;
+    const token = req.headers.authorization;
+    AuthHelper.validateJwt(String(token));
     try {
         const data = await StudentService.postQrCodeStudentService(classId); // Chama o método de forma assíncrona usando await
         res.status(200).send(data);
@@ -39,6 +46,8 @@ export const postStudentQrCodeController = async (req: Request, res: Response): 
 
 export const getQrCode = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
+    const token = req.headers.authorization;
+    AuthHelper.validateJwt(String(token));
     try {
         const qrCode = await StudentService.getQrCode(id);
         res.status(200).send(qrCode); // Send status and response body in one statement
@@ -50,9 +59,9 @@ export const getQrCode = async (req: Request, res: Response): Promise<void> => {
 
 
 export const patchQrCodeStudentController = async (req: Request, res: Response): Promise<void> => {
-    console.log(req.body);
-    console.log(req.params)
     const { id } = req.params;
+    const token = req.headers.authorization;
+    AuthHelper.validateJwt(String(token));
     try {
         await StudentService.patchAttendanceQrCodeService(req.body, id);
         res.sendStatus(204);

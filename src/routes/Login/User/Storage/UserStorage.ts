@@ -37,4 +37,26 @@ export class UserStorage {
         }
     }
 
+    public async getUserByEmail(email: string): Promise<any> {
+        try {
+            // Passo 1: Encontrao usuuario se existir ele ira dar o retorno e se nao o retorno v
+            const user = await knexInstance<any>('users').where({ email: email }).first();
+            return user
+          
+            
+        } catch (e: any) {
+            console.error(`Error retrieving student details: ${e.message}`);
+            throw e; // Propaga o erro para tratamento superior, se necessário
+        }
+    }
+
+    public async updateLastLogged(id: string): Promise<void> {
+        try {
+             await knexInstance<any>('users').update({logged_at: new Date()}).where({id: id})
+        } catch (e: any) {
+            console.error(`Error retrieving student details: ${e.message}`);
+            throw e; // Propaga o erro para tratamento superior, se necessário
+        }
+    }
+
 }
