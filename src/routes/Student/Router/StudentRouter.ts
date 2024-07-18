@@ -14,11 +14,11 @@ import { verifyToken, validateJwtIsTeacher } from "../../../Middleware/AuthMiddl
 
 const StudentRoute = Router();
 
-StudentRoute.get('/:id', getUserByIdController)
-StudentRoute.get('/attendance/:id', [verifyToken],getStudentAttendanceController)
-StudentRoute.get('/qrcode/:id', [verifyToken], getQrCode) // so professor pode fzr isto
-StudentRoute.post('/generate/qrcode/:classId', postStudentQrCodeController) // so professor pode fazer 
-StudentRoute.patch('/mark/attendance/:id', patchQrCodeStudentController) // Aluno pode fazer normalmente
+StudentRoute.get('/:id', [verifyToken], getUserByIdController)
+StudentRoute.get('/attendance/:id', [validateJwtIsTeacher],getStudentAttendanceController)
+StudentRoute.get('/qrcode/:id', [validateJwtIsTeacher], getQrCode) // so professor pode fzr isto
+StudentRoute.post('/generate/qrcode/:classId', [validateJwtIsTeacher], postStudentQrCodeController) // so professor pode fazer 
+StudentRoute.patch('/mark/attendance/:id',[verifyToken], patchQrCodeStudentController) // Aluno pode fazer normalmente
 
 
 

@@ -7,10 +7,8 @@ export class UserStorage {
 
     public async createUser(userObj: any): Promise<any> {
         try {
-            console.log(userObj)
             // Passo 1: Encontrar a presença do aluno
             const user = await knexInstance<any>('users').where({ email: userObj.email }).first();
-            console.log(user)
             if(user){
 
                 throw new ResourceNotFoundExeception('Email já cadastrado, favor inserir outro e-mail');
@@ -18,14 +16,12 @@ export class UserStorage {
 
             const hashPassword = await bcrypt.hash(userObj.password, 10)
 
-            console.log(hashPassword)
 
             const newUserObj = {
                 ...userObj, 
                 password: hashPassword,
             }
 
-            console.log(newUserObj, 'teste')
 
             await knexInstance<any>('users').insert(newUserObj);
 
@@ -52,10 +48,12 @@ export class UserStorage {
 
     public async updateLastLogged(id: string): Promise<void> {
         try {
-             await knexInstance<any>('users').update({logged_at: new Date()}).where({id: id})
+            await knexInstance.transaction(async (trx) => {
+                await trx('users').where({ id }).update({ logged_at: new Date() });
+            });
         } catch (e: any) {
-            console.error(`Error retrieving student details: ${e.message}`);
-            throw e; // Propaga o erro para tratamento superior, se necessário
+            console.error(`Erro ao atualizar data de login do usuário: ${e.message}`);
+            throw e; // Propague o erro para tratamento superior, se necessário
         }
     }
 

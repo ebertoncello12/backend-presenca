@@ -28,9 +28,9 @@ export class UserService {
         try {
             const EXPIRES_TOKEN = 120
             const EXPIRES_REFRESH_TOKEN = Number(EXPIRES_TOKEN) * 60;
-            console.log('caiu no nosso service ?')
             // Buscar o usuario pelo login se nao existir ja travar o usuario
             const userResponse = await this.userStorage.getUserByEmail(authValidateUserObj.email); 
+
 
             if(!userResponse) {
                 throw new ResourceNotFoundExeception('Aluno por e-mail nao encontrado');
@@ -48,7 +48,7 @@ export class UserService {
                 throw new UnauthorizedExeception();
             }
            // Atualizar o logget_at ultimo login
-            await this.userStorage.updateLastLogged(userResponse.id);
+             // await this.userStorage.updateLastLogged(userResponse.id);
             // Gerar o token e fazer diversas validaçoes
             const authToken = await AuthHelper.generateJwtToken(userResponse, studentResponse || null, EXPIRES_TOKEN, EXPIRES_REFRESH_TOKEN)
             return authToken;

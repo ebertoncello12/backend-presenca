@@ -8,26 +8,67 @@ import { ResourceNotFoundExeception } from '../Exception/ResourceNotFoundExecept
 export const verifyToken = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     const token = req.headers.authorization;
 
-    console.log('caiu aqui ?')
 
     if (!token || !token.startsWith('Bearer ')) {
-        throw new ResourceNotFoundExeception('Token invalido ou nao fornecido');
+        return res.status(401).json({
+            errors: {
+                code: 'CODE_ERROR_UNAUTHORIZED',
+                message: 'Token inválido ou não fornecido'
+            }
+        });
     }
 
     const authToken = token.split(' ')[1];
 
     try {
         const decodedToken = jwt.verify(authToken, '26534a9c3e5d-4953849384513aa7df07' || '');
-        console.log('token validado') // Defina a estrutura do payload conforme seu token
         next();
     } catch (error) {
-        throw new UnauthorizedExeception();
+        return res.status(401).json({
+            errors: {
+                code: 'CODE_ERROR_UNAUTHORIZED',
+                message: 'Token inválido'
+            }
+        });
     }
 };
 
 export const validateJwtIsTeacher = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-    const token = req.headers.authorization;
-    const isTeacher = await AuthHelper.getPayload(String(token))
-    console.log(isTeacher)
-    next();
+    const token = req.headers.authorization || '';
+    
+    if (!token || !token.startsWith('Bearer ')) {
+        return res.status(401).json({
+            errors: {
+                code: 'CODE_ERROR_UNAUTHORIZED',
+                message: 'Token inválido ou não fornecido'
+            }
+        });
+    }
+
+    const authToken = token.split(' ')[1];
+
+    try {
+        const decodedToken = jwt.verify(authToken, '26534a9c3e5d-4953849384513aa7df07' || '');
+
+        // Verifica se o grupo do usuário permite acesso
+        const payload: any = decodedToken
+        if (payload.payload.group !== "ADM" && payload.payload.group !== "TEACHER") {
+            return res.status(401).json({
+                errors: [{
+                    code: 'CODE_ERROR_UNAUTHORIZED',
+                    message: 'Seu usuário não tem permissão para isso'
+                }]
+            });
+        }
+
+        // Se tudo estiver correto, passa para o próximo middleware
+        next();
+    } catch (error) {
+        return res.status(401).json({
+            errors: {
+                code: 'CODE_ERROR_UNAUTHORIZED',
+                message: 'Token inválido'
+            }
+        });
+    }
 };

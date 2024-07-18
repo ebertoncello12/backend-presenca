@@ -29,7 +29,6 @@ import { randomUUID } from "crypto";
     
     export const authValidateUser = async (req: Request, res: Response): Promise<void> => {
         const { email, password, } = req.body
-        console.log('esta chamando a rota correta?');
         const authValidateObj = {
             password: password,
             email: email,
