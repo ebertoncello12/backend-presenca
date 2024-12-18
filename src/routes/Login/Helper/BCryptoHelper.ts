@@ -22,6 +22,5 @@ export default class BCryptoHelper {
         }
         return await bcrypt.compare(value ,hash)
     }
-
   
 }

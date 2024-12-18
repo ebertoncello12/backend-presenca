@@ -23,7 +23,9 @@ export class StudentService {
             console.error(`Erro ao buscar aluno por ID: ${error.message}`);
             throw error; // Rejeita a promise com o erro capturado
         }
+        
     }
+ 
     public static async getStudentAttendanceService(id: string): Promise<any> {
         try {
             const studentAttendanceResponse = await this.studentStorage.findAttendanceByStudentId(id); // Chama o método findById do StudentStorage
@@ -99,12 +101,12 @@ export class StudentService {
 
     
     public static async getQrCode(id: string): Promise<string> {
+        console.log(id)
         try {
-            console.log('caiu aqui:22?')
             const studentData = await this.studentStorage.findByQrCode(id); // Supondo que studentStorage é sua classe de armazenamento para alunos
             
             if (!studentData) {
-                throw new Error('QRCODE não encontrado');
+                throw new BadRequestExeception('QRCODE não encontrado');
             }
            const qrCode = qr.imageSync(JSON.stringify(studentData), { type: 'png' }); // Gera um Buffer
            const qrCodeBase64 = qrCode.toString('base64');
@@ -115,15 +117,14 @@ export class StudentService {
         }
     }
 // aqui vai ser aonde o usuario vai marcar presença e por isso precisamos de algumas validaçoes     
-public static async patchAttendanceQrCodeService(attendanceObj: any, studentId: string): Promise<string> {//lendo qrcode
+public static async patchAttendanceQrCodeService(attendanceObj: any, studentId: string): Promise<any> {//lendo qrcode
     try {
         // Transforma o array em objeto acessando o primeiro elemento
         const qrCodeData = attendanceObj[0];
-
         // Aqui continua o seu código existente
         const foundQrCodeData = await this.studentStorage.findByQrCode(qrCodeData.id);
+        console.log(qrCodeData)
         const foundQrCodeObj = foundQrCodeData[0]
-        console.log(foundQrCodeData, 'oque foi achado?')
 
         // Validações continuam conforme o seu código original
         if (!foundQrCodeObj) {
@@ -147,11 +148,9 @@ public static async patchAttendanceQrCodeService(attendanceObj: any, studentId: 
 
         const attendance = await this.studentStorage.findByIdClassAndStudentId(foundQrCodeObj.class_id, studentId);
 
-        console.log(attendance, foundQrCodeObj.class_id)
 
         if(attendance) {
             throw new BadRequestExeception(CODE_ERROR_ATTENDANCE_IS_ALEARDLY_MARKED);
-
         }
 
        const attendanceObjStorage = {
@@ -167,9 +166,10 @@ public static async patchAttendanceQrCodeService(attendanceObj: any, studentId: 
         // Retorne qrCodeData se for o que você precisa retornar
         return qrCodeData;
     } catch (error: any) {
-        console.error(`Erro a o ler e marcar presença para aluno: ${error.message}`);
-        throw error;
+        console.error(`Erro ao ler e marcar presença para aluno: ${JSON.stringify(error)}`);
+        throw new Error(error.errors.message);
     }
+    
 }
 
 }

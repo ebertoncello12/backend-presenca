@@ -5,6 +5,6 @@ export class BadRequestExeception extends BaseErrorExeception {
     if(message) {
         error.message = message
     }
-    super(400, [error])
+    super(400, error)
   }
 }

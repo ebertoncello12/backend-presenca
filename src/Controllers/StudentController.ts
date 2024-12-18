@@ -1,12 +1,9 @@
-import { NextFunction, Request, Response } from 'express';
-import { StudentService } from '../Services/StudentService';
-import { StudentTransformer } from '../../../transformers/StudentTranformer';
-import jwt from 'jsonwebtoken'
-import { AuthHelper } from '../../Login/Helper/AuthHelper';
-import { verifyToken } from '../../../Middleware/AuthMiddleware';
+import { Request, Response } from 'express';
+import { StudentTransformer } from '../transformers/StudentTranformer';
+import { StudentService } from '../routes/Student/Services/StudentService';
 
 export const getUserByIdController = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params; 
+    const { id } = req.params;
     try {
         const data = await StudentService.getStudentByIdService(id); // Chama o método de forma assíncrona usando await
         // const response = await StudentTransformer.transformStudent(data); // Chama o método de forma assíncrona usando await
@@ -17,8 +14,7 @@ export const getUserByIdController = async (req: Request, res: Response): Promis
     }
 };
 
-
-export const getStudentAttendanceController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const getStudentAttendanceController = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     try {
         const data = await StudentService.getStudentAttendanceService(id); // Chama o método de forma assíncrona usando await

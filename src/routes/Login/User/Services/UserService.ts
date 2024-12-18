@@ -44,12 +44,16 @@ export class UserService {
             }
             // Compara a senha a senha do banco hasheada
             const isPasswordValid = await BCryptoHelper.compareValueWithHash(authValidateUserObj.password, userResponse.password);
+        
             if(!isPasswordValid) {
+                
                 throw new UnauthorizedExeception();
             }
+
            // Atualizar o logget_at ultimo login
-             // await this.userStorage.updateLastLogged(userResponse.id);
-            // Gerar o token e fazer diversas validaçoes
+           // await this.userStorage.updateLastLogged(userResponse.id);
+           // Gerar o token e fazer diversas validaçoes
+
             const authToken = await AuthHelper.generateJwtToken(userResponse, studentResponse || null, EXPIRES_TOKEN, EXPIRES_REFRESH_TOKEN)
             return authToken;
         } catch (error: any) {

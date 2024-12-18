@@ -5,50 +5,73 @@ export class StudentStorage {
         try {
             // Passo 1: Encontrar o aluno
             const student = await knexInstance<any>('students').where({ id }).first();
-            
+    
             if (!student) {
                 throw new Error(`Student with id ${id} not found`);
             }
-
+    
             // Passo 2: Encontrar o curso do aluno
             const course = await knexInstance<any>('courses').where({ id: student.course_id }).first();
-
+    
             if (!course) {
                 throw new Error(`Course with id ${student.course_id} not found`);
             }
-
-            // Passo 3: Encontrar as matérias do curso com nome e código e suas respectivas aulas
+    
+          
             const subjects = await knexInstance<any>('subjects')
                 .where({ course_id: course.id })
                 .select('id', 'name', 'code');
-
-            // Transforma a lista de ids das matérias em um array de ids
+    
             const subjectIds = subjects.map((subject) => subject.id);
-
-            // Passo 4: Para cada matéria, encontrar suas classes (aulas)
+    
+            
             for (const subject of subjects) {
+               
                 const classes = await knexInstance<any>('classes')
                     .where({ subject_id: subject.id })
-                    .select('id', 'date', 'semester_id');
-
-                // Adiciona as classes (aulas) à matéria atual
+                    .select('id', 'date', 'semester_id', 'duration', 'classroom', 'typeClass', 'startTimeClass');
+    
+                let totalClasses = classes.length;
+                let attendedClasses = 0;
+    
+              
+                for (const classItem of classes) {
+                    const attendance = await knexInstance<any>('attendance')
+                        .where({ class_id: classItem.id, student_id: id })
+                        .first();
+    
+                    
+                    if (attendance) {
+                        classItem.attendance = true;
+                        attendedClasses++;
+                    } else {
+                        classItem.attendance = false;
+                    }
+                }
+    
+              
+                const attendancePercentage = totalClasses > 0 ? (attendedClasses / totalClasses) * 100 : 0;
+    
+             
                 subject.classes = classes;
+                subject.attendancePercentage = attendancePercentage;
             }
-
-            // Agora podemos adicionar as informações ao objeto do aluno
+    
+        
             const extendedStudent = {
                 ...student,
                 course,
                 subjects,
             };
-
+    
             return extendedStudent;
-            
+    
         } catch (e: any) {
             console.error(`Error retrieving student details: ${e.message}`);
             throw e; // Propaga o erro para tratamento superior, se necessário
         }
     }
+    
 
     public async findAttendanceByStudentId(id: string): Promise<any> {
         try {
