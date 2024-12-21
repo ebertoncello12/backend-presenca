@@ -1,5 +1,7 @@
 import { knexInstance } from "../../../Database/KnexConnection";
 import { generateRandomQRCode } from "../../../Helper/GenerateQrCodeHelper";
+import nodemailer from 'nodemailer';
+
 export class StudentStorage {
     public async findById(id: string): Promise<any> {
         try {
@@ -143,6 +145,46 @@ export class StudentStorage {
             throw e; // Propaga o erro para tratamento superior, se necessário
         }
     }
+
+    public async postCreateAttendanceAttemptService(attendanceAttemptObj: any): Promise<void> {
+        // Verificar quantos registros com o mesmo student_id existem na tabela
+        const existingAttempts = await knexInstance<any>('attendance_attempts')
+            .where('student_id', attendanceAttemptObj.student_id);
+
+
+        if (Array.isArray(attendanceAttemptObj.attemptFace)) {
+            attendanceAttemptObj.attemptFace = JSON.stringify(attendanceAttemptObj.attemptFace);
+        }
+
+        try {
+            await knexInstance<any>('attendance_attempts').insert(attendanceAttemptObj);
+        } catch (e: any) {
+            console.error(`Error inserting into attendance_attempts: ${e.message}`);
+            throw e; // Propaga o erro para tratamento superior, se necessário
+        }
+    }
+
+
+    public async sendEmail(mailOptions: { to: string, subject: string, html: string }) {
+        console.log('disparou o email')
+        // Configuração do transportador de email (ajuste com seu serviço)
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',  // Ou qualquer serviço de sua escolha
+            auth: {
+                user: 'enzzoferrariberto@gmail.com',  // Substitua pelo seu e-mail
+                pass: 'epzv etgt qajo tgjh'    // Substitua pela sua senha
+            }
+        });
+
+        // Enviar o e-mail
+        await transporter.sendMail({
+            from: 'enzzoferrariberto@gmail.com',  // Remetente
+            ...mailOptions // Desestrutura o objeto e passa as opções como 'to', 'subject', e 'html'
+        });
+    }
+
+
+
     public async patchQrCodeStudent(id: string): Promise<void> {
         try {
             await knexInstance('qrcode').where({ id }) // Filtrar pelo ID fornecido

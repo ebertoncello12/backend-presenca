@@ -69,6 +69,28 @@ export class StudentService {
         }
     }
 
+    public static async postCreateAttendanceAttemptService(studentId: string, attemptFace: string[], ip: any): Promise<any> {
+        try {
+            const attendanceAttemptObj = {
+                id: uuidv4(),
+                student_id: studentId,
+                attemptFace: attemptFace,
+                ip: ip,
+                created_at: new Date(),
+                attempt_timestamp: new Date(),
+            };
+            await this.studentStorage.postCreateAttendanceAttemptService(attendanceAttemptObj);
+            return {id: attendanceAttemptObj.id}
+
+        } catch (error: any) {
+            console.error(`Erro ao gerar código QR para aluno: ${error.message}`);
+            throw error;
+        }
+    }
+
+
+
+
     public static async patchQrCodeStudent(id: string, classId: string): Promise<any> {
         try {
 
@@ -101,7 +123,6 @@ export class StudentService {
 
     
     public static async getQrCode(id: string): Promise<string> {
-        console.log(id)
         try {
             const studentData = await this.studentStorage.findByQrCode(id); // Supondo que studentStorage é sua classe de armazenamento para alunos
             
@@ -123,7 +144,7 @@ public static async patchAttendanceQrCodeService(attendanceObj: any, studentId: 
         const qrCodeData = attendanceObj[0];
         // Aqui continua o seu código existente
         const foundQrCodeData = await this.studentStorage.findByQrCode(qrCodeData.id);
-        console.log(qrCodeData)
+
         const foundQrCodeObj = foundQrCodeData[0]
 
         // Validações continuam conforme o seu código original

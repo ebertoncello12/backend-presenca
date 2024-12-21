@@ -41,6 +41,22 @@ export const postStudentQrCodeController = async (req: Request, res: Response): 
     }
 };
 
+export const postCreateAttendanceAttemptController = async (req: Request, res: Response): Promise<void> => {
+    const { attemptFace } = req.body;
+    const { id } = req.params;
+
+    const ip = req.headers['x-forwarded-for'] as string || req.connection.remoteAddress;
+
+    try {
+        const data = await StudentService.postCreateAttendanceAttemptService(id, attemptFace, ip);
+        res.status(200).send(data);
+    } catch (error: any) {
+        console.error('Erro ao buscar aluno:', error);
+        res.status(500).json({ message: error.errors });
+    }
+};
+
+
 export const getQrCode = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     try {

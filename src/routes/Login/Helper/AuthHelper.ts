@@ -33,9 +33,12 @@ export class AuthHelper {
             status: userResponse.status,
             loggetAt: userResponse.logget_at,
             studentId: userResponse.student_id,
-            registration: studentResponse.registration,
+            registration: studentResponse?.registration,
             studentName: studentResponse.name,
+            registrationFace: studentResponse.registration_face,
         }
+
+
 
         const response = {
             token: jwt.sign(

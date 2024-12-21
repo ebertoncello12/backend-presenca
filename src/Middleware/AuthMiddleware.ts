@@ -11,7 +11,7 @@ import { ResourceNotFoundExeception } from '../Exception/ResourceNotFoundExecept
 // Função para verificar o token
 export const verifyToken = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     const token = req.headers.authorization;
-    console.log(token)
+
 
     if (!token || !token.startsWith('Bearer ')) {
         return res.status(401).json({
@@ -82,7 +82,7 @@ export const captureIP = async (req: Request, res: Response, next: NextFunction)
     try {
         // Usa request-ip para capturar o IP do cliente
         const clientIP = requestIp.getClientIp(req) || '';
-        console.log(clientIP);
+
 
         // Adiciona o IP capturado ao objeto req para uso posterior
         (req as any).clientIP = clientIP;
@@ -90,17 +90,12 @@ export const captureIP = async (req: Request, res: Response, next: NextFunction)
         // Utiliza uma API de geolocalização para buscar informações do IP
         const geoLocationAPI = `http://ip-api.com/json/${'179.116.11.31'}?fields=status,regionName,city`;
         const response = await axios.get(geoLocationAPI);
-
-
-        console.log(response)
-
-        // Verifica se a localização está na região de Campinas, SP
         if (response.data.status === 'success' &&
-            response.data.regionName === 'São Paulo' &&  // Verifica se é o estado de São Paulo
-            response.data.city === 'Paulínia') {         // Verifica se é a cidade de Campinas
-            next();  // IP está na região correta, continua para o próximo middleware
+            response.data.regionName === 'São Paulo' &&
+            response.data.city === 'Paulínia') {
+            next();
         } else {
-            // IP não está na região de Campinas, retorna status 401 Unauthorized
+
             return res.status(401).json({ message: 'Sem acesso nessa região' });
         }
     } catch (error) {
